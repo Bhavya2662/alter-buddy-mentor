@@ -59,7 +59,7 @@ export const MentorDashboardPage = () => {
     isLoading: isPackageLoading,
     isError: isPackageError,
     error: packageError,
-  } = useGetMentorSessionPackagesQuery(profile?.data?._id);
+  } = useGetMentorSessionPackagesQuery(profile?.data?._id as string, { skip: !profile?.data?._id });
 
   const [updateMentorProfile] = useUpdateMentorProfileMutation();
 

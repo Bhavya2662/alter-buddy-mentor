@@ -62,7 +62,7 @@ export const MentorSessionPackagePage = () => {
     data: packageData,
     isLoading: isLoadingPackages,
     refetch,
-  } = useGetMentorSessionPackagesQuery(mentorId);
+  } = useGetMentorSessionPackagesQuery(mentorId as string, { skip: !mentorId });
 
   const {
     data: callsData,

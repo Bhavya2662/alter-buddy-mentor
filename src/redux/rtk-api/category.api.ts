@@ -1,9 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { ApiBaseQuery, baseQueryUser } from "../../utils";
+import { ApiBaseQuery, baseQueryMentor } from "../../utils";
 import { ICategoryProps } from "../../interface";
 
 const CategoryApi = createApi({
-  baseQuery: ApiBaseQuery(baseQueryUser),
+  baseQuery: ApiBaseQuery(baseQueryMentor),
   reducerPath: "categoryApi",
   endpoints: ({ query }) => ({
     GetAllCategory: query<{ data: ICategoryProps[] }, void>({

@@ -20,9 +20,10 @@ const handleAuthError = (status: number, requestUrl?: string) => {
     const currentPath = window.location.pathname;
     const isMentorLoginPath = currentPath.startsWith('/mentor/login');
     const isUserLoginPath = currentPath.startsWith('/sign-in');
+    const isMentorContext = currentPath.includes('/mentor');
     
-    if (isMentorRequest && mentorToken) {
-      // Auto logout mentor only for mentor requests
+    if (isMentorRequest && mentorToken && isMentorContext) {
+      // Auto logout mentor only for mentor requests within mentor context
       removeMentorToken();
       const store = (window as any).__REDUX_STORE__;
       if (store) {
@@ -43,8 +44,8 @@ const handleAuthError = (status: number, requestUrl?: string) => {
           window.location.href = "/mentor/login";
         }, 1500);
       }
-    } else if (!isMentorRequest && userToken) {
-      // Auto logout user only for user requests
+    } else if (!isMentorRequest && userToken && !isMentorContext) {
+      // Auto logout user only for user requests outside mentor context
       removeUserToken();
       const store = (window as any).__REDUX_STORE__;
       if (store) {

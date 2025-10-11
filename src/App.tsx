@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { AppProvider } from "./providers";
-import { AppRoutes } from "./routes";
+import { MentorAppRoutes } from "./routes";
 import Intercom from '@intercom/messenger-js-sdk';
 import { socketService } from "./service/socket.service";
 
@@ -35,7 +35,7 @@ export default function App() {
   });
   return (
     <AppProvider>
-      <AppRoutes />
+      <MentorAppRoutes />
     </AppProvider>
   );
 }

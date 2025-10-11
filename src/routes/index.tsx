@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import {
   AllMentorsPage,
   ComingSoonPage,
@@ -197,6 +197,18 @@ export const AppRoutes = () => {
             <Route path="package-booking/:packageId" element={<PackageBookingPage />} />
           </Route>
         </Route>
+
+      </Routes>
+      {!shouldHideFooter && <Footer />}
+    </>
+  );
+};
+
+export const MentorAppRoutes = () => {
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Navigate to="/mentor/login" replace />} />
         <Route path="/mentor/login" element={<MentorLoginPage />} />
         <Route path="/mentor/reset-password" element={<ResetPasswordPage />} />
         <Route path="mentor">
@@ -215,7 +227,6 @@ export const AppRoutes = () => {
           </Route>
         </Route>
       </Routes>
-      {!shouldHideFooter && <Footer />}
     </>
   );
 };
