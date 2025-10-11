@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: alterbuddy-frontend
+    env: node
+    plan: free
+    buildCommand: npm install && CI=false npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
