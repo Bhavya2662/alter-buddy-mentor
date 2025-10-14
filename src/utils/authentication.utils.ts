@@ -73,7 +73,7 @@ const handleAuthError = (status: number, requestUrl?: string) => {
 // Enhanced API base query with automatic logout on auth errors
 export const ApiBaseQuery = (baseQuery?: (headers: Headers) => void): BaseQueryFn => {
   const baseQueryFn = fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_BACKEND_URL,
+    baseUrl: process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_API_URL || 'https://alter-buddy-api-ih2y.onrender.com/api/1.0',
     prepareHeaders: (headers, { getState }) => {
       // Mark as RTK Query request to avoid axios interceptor conflicts
       headers.set('RTK-Query', 'true');

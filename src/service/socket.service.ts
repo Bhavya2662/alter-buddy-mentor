@@ -5,10 +5,14 @@ class SocketService {
   private currentUserId: string | null = null;
 
   constructor() {
-    this.socket = io(process.env.REACT_APP_SOCKET_SERVER as string, {
-      autoConnect: false,
-      transports: ['websocket', 'polling']
-    });
+    this.socket = io(
+      (process.env.REACT_APP_SOCKET_SERVER as string) ||
+        (process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace('/api/1.0', '') : 'https://alter-buddy-api-ih2y.onrender.com'),
+      {
+        autoConnect: false,
+        transports: ['websocket', 'polling'],
+      }
+    );
 
     this.setupEventListeners();
   }

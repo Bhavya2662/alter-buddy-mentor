@@ -28,7 +28,7 @@ import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import clsx from "clsx";
 import { MdOutlineFormatQuote } from "react-icons/md";
-import { Helmet } from "react-helmet";
+import Helmet from "react-helmet";
 import DOMPurify from "dompurify";
 import { useGetMyWalletQuery, useRechargeWalletMutation } from "../../../../redux/rtk-api/buddy-coin.api";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
@@ -76,6 +76,8 @@ export const UserMentorDetailsPage = () => {
   const [requiredAmount, setRequiredAmount] = useState<number>(0);
   const [pendingBookingData, setPendingBookingData] = useState<any>(null);
   const [RechargeWallet, { isLoading: isRechargeLoading }] = useRechargeWalletMutation();
+  // Prevent double auto-resume
+  const hasAutoResumedRef = useRef(false);
 
   // API queries
   const { data: mentor } = useGetMentorUsingIdQuery(id || "");
@@ -88,6 +90,61 @@ export const UserMentorDetailsPage = () => {
   // Helper functions
   const toggleLinks = () => setShowLinks(!showLinks);
   const handlePrivacyAccept = () => setAccept(!accept);
+
+  // Auto-resume booking after wallet recharge
+  useEffect(() => {
+    const shouldResume = localStorage.getItem('resume-booking') === 'true';
+    const pending = localStorage.getItem('pending-booking');
+    if (shouldResume && pending && !hasAutoResumedRef.current) {
+      hasAutoResumedRef.current = true;
+      let parsed: any = null;
+      try {
+        parsed = JSON.parse(pending);
+      } catch (e) {
+        parsed = null;
+      }
+      const bookingData = parsed?.bookingData || parsed;
+      if (bookingData && bookingData.userId && bookingData.mentorId) {
+        (async () => {
+          try {
+            const response = await bookSlot(bookingData).unwrap();
+            // Handle meeting/join links from response
+            let meetingLink: string | undefined;
+            if (response?.data) {
+              const { guestJoinURL, hostJoinURL, chatLink, joinLink } = response.data;
+              meetingLink = guestJoinURL || chatLink || joinLink;
+            }
+            if (meetingLink) {
+              toast.success(
+                <div>
+                  <p>Session booked successfully after recharge!</p>
+                  <a href={meetingLink} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>
+                    Click here to join your session
+                  </a>
+                </div>,
+                { autoClose: 10000 }
+              );
+            } else {
+              toast.success('Session booked successfully after recharge! Meeting link will be sent via email.');
+            }
+          } catch (err: any) {
+            console.error('Auto-resume booking failed:', err);
+            toast.error(err?.data?.message || 'Failed to resume booking. Please try again.');
+          } finally {
+            // Clear resume flags to prevent loops
+            localStorage.removeItem('resume-booking');
+            localStorage.removeItem('pending-booking');
+            localStorage.removeItem('payment-redirection');
+          }
+        })();
+      } else {
+        // Invalid data; clear flags
+        localStorage.removeItem('resume-booking');
+        localStorage.removeItem('pending-booking');
+        localStorage.removeItem('payment-redirection');
+      }
+    }
+  }, [bookSlot]);
 
   const BookSlot = async () => {
     if (!callType) {
@@ -127,10 +184,8 @@ export const UserMentorDetailsPage = () => {
 
     try {
       const timeNumber = Number(selectTime) || 5;
-      
       // Create booking data based on session type
       let bookingData: any;
-      
       if (callType === "chat" || (callType === "audio" && setSelectType === "time")) {
         // For chat sessions or audio with preferred time, slotId is not required
         bookingData = {
@@ -138,7 +193,7 @@ export const UserMentorDetailsPage = () => {
           mentorId: id || "",
           time: timeNumber,
           callType: callType as string,
-          type: sessionType || "individual",
+          type: 'instant',
         };
       } else {
         // For video sessions or audio with slot selection, slotId is required
@@ -148,7 +203,7 @@ export const UserMentorDetailsPage = () => {
           slotId: selectedTimeSlot._id,
           time: timeNumber,
           callType: callType as string,
-          type: sessionType || "individual",
+          type: 'slot',
         };
       }
 
@@ -403,7 +458,7 @@ export const UserMentorDetailsPage = () => {
           mentorId: id || '',
           slotId: slot._id,
           callType: callType as string,
-          type: 'package',
+          type: 'slot',
           packageId: selectedPackage._id,
           date: slot.date,
           time: slot.time

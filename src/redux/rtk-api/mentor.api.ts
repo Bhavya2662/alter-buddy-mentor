@@ -32,6 +32,7 @@ const MentorApi = createApi({
         callType: string;
         type: string;
         time: number;
+        packageId?: string;
       }
     >({
       query: ({
@@ -41,6 +42,7 @@ const MentorApi = createApi({
         callType,
         type,
         time,
+        packageId,
       }: {
         userId: string;
         slotId: string;
@@ -48,6 +50,7 @@ const MentorApi = createApi({
         callType: string;
         type: string;
         time: number;
+        packageId?: string;
       }) => {
         const token = getUserToken();
         return {
@@ -60,6 +63,7 @@ const MentorApi = createApi({
             callType,
             type,
             time,
+            packageId,
           },
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         };

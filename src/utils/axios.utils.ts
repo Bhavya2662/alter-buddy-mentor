@@ -5,7 +5,7 @@ import { handleAuthError } from './authentication.utils';
 // Create axios instance with base configuration
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: process.env.REACT_APP_API_URL || process.env.REACT_APP_BACKEND_URL || 'https://alter-buddy-api-ih2y.onrender.com/api/1.0',
     timeout: 30000,
     headers: {
       'Content-Type': 'application/json',

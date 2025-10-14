@@ -22,7 +22,7 @@ interface SessionDetails {
  * Email Service for sending emails through the API
  */
 export class EmailService {
-  private static API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/1.0';
+  private static API_URL = process.env.REACT_APP_API_URL || process.env.REACT_APP_BACKEND_URL || 'https://alter-buddy-api-ih2y.onrender.com/api/1.0';
 
   /**
    * Send a confirmation email with join button

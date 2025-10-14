@@ -192,7 +192,9 @@ const RantVantOut = () => {
   // Socket connection and event listeners
   useEffect(() => {
     if (selectedSessionType) {
-      const newSocket = io(process.env.REACT_APP_API_URL.replace('/api/1.0', ''));
+      const serverUrl = process.env.REACT_APP_SOCKET_SERVER ||
+        (process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace('/api/1.0', '') : 'https://alter-buddy-api-ih2y.onrender.com');
+      const newSocket = io(serverUrl);
       setSocket(newSocket);
 
       // Listen for session acceptance
