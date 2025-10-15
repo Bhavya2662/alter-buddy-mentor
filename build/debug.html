@@ -212,7 +212,7 @@
             loginDiv.innerHTML = 'Testing mentor login...';
             
             try {
-                const response = await fetch('https://alter-buddy-api.onrender.com/api/1.0/mentor/sign-in', {
+                const response = await fetch('https://alter-buddy-api-ih2y.onrender.com/api/1.0/mentor/sign-in', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -260,10 +260,10 @@
                             <li>Go to Vercel Dashboard → Your Project → Settings → Environment Variables</li>
                             <li>Add the following variables:
                                 <ul>
-                                    <li>REACT_APP_BACKEND_URL = https://alter-buddy-api-main-production.up.railway.app/api/1.0</li>
-                                    <li>REACT_APP_API_BASE_URL = https://alter-buddy-api-main-production.up.railway.app</li>
-                                    <li>REACT_APP_API_URL = https://alter-buddy-api-main-production.up.railway.app/api/1.0</li>
-                                    <li>REACT_APP_SOCKET_SERVER = https://alter-buddy-api-main-production.up.railway.app</li>
+                                    <li>REACT_APP_BACKEND_URL = https://alter-buddy-api-ih2y.onrender.com/api/1.0</li>
+                                    <li>REACT_APP_API_BASE_URL = https://alter-buddy-api-ih2y.onrender.com</li>
+                                    <li>REACT_APP_API_URL = https://alter-buddy-api-ih2y.onrender.com/api/1.0</li>
+                                    <li>REACT_APP_SOCKET_SERVER = https://alter-buddy-api-ih2y.onrender.com</li>
                                     <li>REACT_APP_ABLY_KEY = [Your Ably Key]</li>
                                 </ul>
                             </li>
